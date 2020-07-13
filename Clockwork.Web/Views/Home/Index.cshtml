@@ -6,16 +6,14 @@ function UserAction() {
             document.getElementById("output").innerHTML = this.responseText;
         }
     };
-    xhttp.open("GET", "http://127.0.0.1:5000/api/currenttime", true);
+    xhttp.open("GET", "http://localhost:5000/api/currenttime", true);
     xhttp.setRequestHeader("Content-type", "application/json");
     xhttp.send();
 
 }
 </script>
-
 <h2>AWH Clockwork Project @ViewData["Version"] on @ViewData["Runtime"]!</h2>
-
-
 <button type="submit" onclick="UserAction()">Get the time</button>
-
 <p id="output"></p>
+
+

@@ -1,0 +1,30 @@
+﻿body {
+
+}
+
+#top, #bottom  {
+    background-color: black;
+    height: 40px;
+    width: 100%;
+}
+
+#top { 
+    color: white !important;
+    font-size: 20px;
+    line-height: 40px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#content {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 10px;
+    margin-bottom: 45px;
+}
+
+#bottom {
+    position: fixed;
+    bottom: 0;
+}
