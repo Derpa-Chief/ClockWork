@@ -40,14 +40,18 @@ function UseHttpRequest(xhttp, method, url) {
 }
 
 function GetDataOfPage(pageIndex) {
-    var elems = document.querySelectorAll(".page-button");
+    let pageButtons = document.querySelectorAll(".page-button");
 
-    [].forEach.call(elems, function(el) {
+    [].forEach.call(pageButtons, function(el) {
         el.classList.remove("active");
     });
     
     document.getElementById("page-index").value = pageIndex;
-    document.getElementById("page-button-" + pageIndex).classList.add("active");
+
+    if(pageButtons.length > 0) {
+        document.getElementById("page-button-" + pageIndex).classList.add("active");
+    }
+    
     GetPagingValues();
 
     var xhttp = new XMLHttpRequest();
@@ -61,6 +65,23 @@ function GetDataOfPage(pageIndex) {
     UseHttpRequest(xhttp, "GET", "http://localhost:5000/api/pasttimes" + parameters);   
     
     
+}
+
+function GoToNextPage() {
+    const pageIndex = parseInt(document.getElementById("page-index").value);
+    const totalPages = parseInt(document.getElementById("total-pages").value);
+    
+    if(pageIndex < totalPages) {
+        GetDataOfPage(pageIndex + 1);        
+    }
+}
+
+function GoToPreviousPage() {
+    const pageIndex = parseInt(document.getElementById("page-index").value);
+    
+    if(pageIndex > 1) {
+        GetDataOfPage(pageIndex - 1);
+    }    
 }
 
 function GetPagingValues(isInitialLoad = false) {
@@ -78,6 +99,8 @@ function ShowCurrentTime(currentTime) {
 }
 
 function CreateTable(pastTimes, totalPages) {
+    document.getElementById("total-pages").value = totalPages;
+    
     var html = "<table id=\"past-times-table\" class =\"ui celled padded table\"><thead>" +
         "<tr>" +
         "<th>Id</th><th>Time</th>" +
@@ -87,27 +110,42 @@ function CreateTable(pastTimes, totalPages) {
     html = PopulateData(html, pastTimes);
     
     var pageButtons = "";
+    var dropDown = CreateJumpTo(totalPages);;
     
-    for(let i = 0; i < totalPages; i++) {
-        var activeClass = i === 0 ? "active" : "";
-        
-        pageButtons += "<a id=\"page-button-" + (i+1) + "\" onclick=\"GetDataOfPage(" + (i+1) + ");\" class=\"item page-button " + activeClass + "\">" + (i + 1) + "</a>"; 
+    if(totalPages < 16) {
+        for(let i = 0; i < totalPages; i++) {
+            var activeClass = i === 0 ? "active" : "";
+
+            pageButtons += "<a id=\"page-button-" + (i+1) + "\" onclick=\"GetDataOfPage(" + (i+1) + ");\" class=\"item page-button " + activeClass + "\">" + (i + 1) + "</a>";
+        }
     }
 
     html += "<tfoot>" +
-        "    <tr><th colspan=\"5\">" +
+        "    <tr><th colspan=\"5\">" + dropDown +
         "      <div class=\"ui right floated pagination menu\">" +
-        "        <a class=\"icon item\">" +
+        "        <a class=\"icon item\" onclick=\"GoToPreviousPage();\">" +
         "          <i class=\"left chevron icon\"></i>" +
         "        </a>\n" +
         pageButtons +
-        "        <a class=\"icon item\">" +
+        "        <a class=\"icon item\" onclick=\"GoToNextPage();\">" +
         "          <i class=\"right chevron icon\"></i>\n" +
         "        </a>\n" +
         "      </div>\n" +
         "    </th>\n" +
         "  </tr></tfoot></tbody></table>"
 
+    return html;
+}
+
+function CreateJumpTo(totalPages) {
+    var html = "Jump To: <select id=\"page-size\" onchange=\"GetDataOfPage(this.value);\" class=\"ui dropdown\">";
+
+    for(let i = 0; i < totalPages; i++) {
+        html += "<option value=\"" + (i+1) + "\">" + (i+1) + "</option>\n";
+    }
+    
+    html += "</select>";
+    
     return html;
 }
 

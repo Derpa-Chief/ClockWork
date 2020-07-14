@@ -25,7 +25,7 @@ namespace Clockwork.API.Controllers
             var returnPastTimes = pastTimes.Select(pt => new
             {
                 Id = pt.CurrentTimeQueryId,
-                Time = pt.Time.ToString("g")
+                Time = pt.UTCTime.ToString("g")
             });
             
             return Ok(new { pastTimes = returnPastTimes, pageIndex = pageIndex, totalPages = pastTimes.TotalPages });

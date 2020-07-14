@@ -1,5 +1,7 @@
-﻿body {
-
+﻿@media only screen and (max-width: 600px) {
+    .page-button { 
+        display: none !important;
+    }
 }
 
 #top, #bottom  {
