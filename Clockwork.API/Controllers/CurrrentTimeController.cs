@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Clockwork.API.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Clockwork.API.Controllers
 {
@@ -11,7 +13,7 @@ namespace Clockwork.API.Controllers
     {
         // GET api/currenttime
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get(int pageIndex = 1, int pageSize = 10)
         {
             var utcTime = DateTime.UtcNow;
             var serverTime = DateTime.Now;
@@ -23,16 +25,16 @@ namespace Clockwork.API.Controllers
                 ClientIp = ip,
                 Time = serverTime
             };
-            
-            var pastTimes = new List<CurrentTimeQuery>();
 
-            using (var db = new ClockworkContext())
+            PaginatedList<CurrentTimeQuery> pastTimes;
+
+            await using (var db = new ClockworkContext())
             {
-                db.CurrentTimeQueries.Add(newCurrentTime);
-                var count = db.SaveChanges();
+                await db.CurrentTimeQueries.AddAsync(newCurrentTime);
+                var count = await db.SaveChangesAsync();
                 Console.WriteLine("{0} records saved to database", count);
 
-                pastTimes = db.CurrentTimeQueries.ToList();
+                pastTimes = await PaginatedList<CurrentTimeQuery>.CreateAsync(db.CurrentTimeQueries.AsNoTracking(), pageIndex, pageSize);
                 
                 Console.WriteLine();
                 foreach (var currentTimeQuery in db.CurrentTimeQueries)
@@ -47,7 +49,7 @@ namespace Clockwork.API.Controllers
                 Time = pt.Time.ToString("g")
             });
 
-            return Ok(new { currentTime = newCurrentTime.Time.ToString("g"), pastTimes = returnPastTimes });
+            return Ok(new { currentTime = newCurrentTime.Time.ToString("g"), pastTimes = returnPastTimes, totalPages = pastTimes.TotalPages});
         }
     }
 }

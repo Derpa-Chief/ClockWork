@@ -1,6 +1,15 @@
 ﻿<script src ="/javascript/main.js"></script>
 <h2>AWH Clockwork Project @ViewData["Version"] on @ViewData["Runtime"]!</h2>
 <button type="submit" onclick="UserAction()">Get the time</button>
+Page Size: 
+<select id="page-size" onchange="GetPastTimes(true);" class="ui dropdown">
+  <option value="10" selected>10</option>
+  <option value="25">25</option>
+  <option value="50">50</option>
+</select>
+<p id="current-time"></p>
 <p id="output"></p>
+<input type="hidden" id="page-index" value="1" />
+
 
 

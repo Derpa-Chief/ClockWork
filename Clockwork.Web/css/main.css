@@ -29,6 +29,6 @@
     bottom: 0;
 }
 
-#output {
+#output, #current-time {
     margin-top: 10px !important;
 }
