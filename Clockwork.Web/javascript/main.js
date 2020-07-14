@@ -40,7 +40,14 @@ function UseHttpRequest(xhttp, method, url) {
 }
 
 function GetDataOfPage(pageIndex) {
+    var elems = document.querySelectorAll(".page-button");
+
+    [].forEach.call(elems, function(el) {
+        el.classList.remove("active");
+    });
+    
     document.getElementById("page-index").value = pageIndex;
+    document.getElementById("page-button-" + pageIndex).classList.add("active");
     GetPagingValues();
 
     var xhttp = new XMLHttpRequest();
@@ -82,7 +89,9 @@ function CreateTable(pastTimes, totalPages) {
     var pageButtons = "";
     
     for(let i = 0; i < totalPages; i++) {
-       pageButtons += "<a onclick=\"GetDataOfPage(" + (i+1) + ");\" class=\"item\">" + (i + 1) + "</a>"; 
+        var activeClass = i === 0 ? "active" : "";
+        
+        pageButtons += "<a id=\"page-button-" + (i+1) + "\" onclick=\"GetDataOfPage(" + (i+1) + ");\" class=\"item page-button " + activeClass + "\">" + (i + 1) + "</a>"; 
     }
 
     html += "<tfoot>" +
