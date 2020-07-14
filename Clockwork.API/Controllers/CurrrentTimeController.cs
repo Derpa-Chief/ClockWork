@@ -41,7 +41,13 @@ namespace Clockwork.API.Controllers
                 }
             }
 
-            return Ok(new { currentTime = newCurrentTime, pastTimes = pastTimes });
+            var returnPastTimes = pastTimes.Select(pt => new
+            {
+                Id = pt.CurrentTimeQueryId,
+                Time = pt.Time.ToString("g")
+            });
+
+            return Ok(new { currentTime = newCurrentTime.Time.ToString("g"), pastTimes = returnPastTimes });
         }
     }
 }
