@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Clockwork.API.Models;
 
@@ -15,27 +17,31 @@ namespace Clockwork.API.Controllers
             var serverTime = DateTime.Now;
             var ip = this.HttpContext.Connection.RemoteIpAddress.ToString();
 
-            var returnVal = new CurrentTimeQuery
+            var newCurrentTime = new CurrentTimeQuery
             {
                 UTCTime = utcTime,
                 ClientIp = ip,
                 Time = serverTime
             };
+            
+            var pastTimes = new List<CurrentTimeQuery>();
 
             using (var db = new ClockworkContext())
             {
-                db.CurrentTimeQueries.Add(returnVal);
+                db.CurrentTimeQueries.Add(newCurrentTime);
                 var count = db.SaveChanges();
                 Console.WriteLine("{0} records saved to database", count);
 
+                pastTimes = db.CurrentTimeQueries.ToList();
+                
                 Console.WriteLine();
-                foreach (var CurrentTimeQuery in db.CurrentTimeQueries)
+                foreach (var currentTimeQuery in db.CurrentTimeQueries)
                 {
-                    Console.WriteLine(" - {0}", CurrentTimeQuery.UTCTime);
+                    Console.WriteLine(" - {0}", currentTimeQuery.UTCTime);
                 }
             }
 
-            return Ok(returnVal);
+            return Ok(new { currentTime = newCurrentTime, pastTimes = pastTimes });
         }
     }
 }

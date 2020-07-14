@@ -21,10 +21,14 @@
     margin-left: auto;
     margin-right: auto;
     padding-top: 10px;
-    margin-bottom: 45px;
+    margin-bottom: 55px;
 }
 
 #bottom {
     position: fixed;
     bottom: 0;
+}
+
+#output {
+    margin-top: 10px !important;
 }
