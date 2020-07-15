@@ -313,3 +313,5 @@ OpenCover/
 
 # Azure Stream Analytics local run output 
 ASALocalRun/
+Clockwork.API/clockwork.db-shm
+Clockwork.API/clockwork.db-wal

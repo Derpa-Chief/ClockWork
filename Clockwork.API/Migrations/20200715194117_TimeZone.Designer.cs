@@ -3,14 +3,16 @@ using System;
 using Clockwork.API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Clockwork.API.Migrations
 {
     [DbContext(typeof(ClockworkContext))]
-    partial class ClockworkContextModelSnapshot : ModelSnapshot
+    [Migration("20200715194117_TimeZone")]
+    partial class TimeZone
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

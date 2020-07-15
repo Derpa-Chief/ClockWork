@@ -6,16 +6,41 @@
 
 #top, #bottom  {
     background-color: black;
+}
+
+#top, #bottom {
     height: 40px;
     width: 100%;
 }
 
-#top { 
+#top {
     color: white !important;
     font-size: 20px;
     line-height: 40px;
     padding-left: 10px;
     padding-right: 10px;
+}
+
+#current-time-container {
+    margin-top: 10px;
+}
+
+#current-time-container div {
+    padding-right: 5px;
+    padding-bottom: 10px;
+    float: left;
+}
+
+#current-time {
+    padding: 8px;
+}
+
+#page-size-container {
+    clear: both;
+}
+
+#top select {
+    font-size: 13px;
 }
 
 #content {
@@ -26,11 +51,15 @@
     margin-bottom: 55px;
 }
 
+#past-times-table {
+    margin-top: 10px;
+}
+
 #bottom {
     position: fixed;
     bottom: 0;
 }
 
-#output, #current-time {
+#output {
     margin-top: 10px !important;
 }

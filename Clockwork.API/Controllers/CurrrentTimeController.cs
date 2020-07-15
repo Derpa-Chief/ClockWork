@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Clockwork.API.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Clockwork.API.Models;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace Clockwork.API.Controllers
     {
         // GET api/currenttime
         [HttpGet]
-        public async Task<IActionResult> Get(int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Get(string timeZone, int pageIndex = 1, int pageSize = 10)
         {
             var utcTime = DateTime.UtcNow;
             var serverTime = DateTime.Now;
@@ -23,7 +24,8 @@ namespace Clockwork.API.Controllers
             {
                 UTCTime = utcTime,
                 ClientIp = ip,
-                Time = serverTime
+                Time = serverTime,
+                TimeZone = timeZone
             };
 
             PaginatedList<CurrentTimeQuery> pastTimes;
@@ -46,10 +48,11 @@ namespace Clockwork.API.Controllers
             var returnPastTimes = pastTimes.Select(pt => new
             {
                 Id = pt.CurrentTimeQueryId,
-                Time = pt.UTCTime.ToString("g")
+                Time = TimeHelpers.ConvertTimeToTimeZone(pt.Time, pt.TimeZone).ToString("g"),
+                TimeZone = pt.TimeZone
             });
 
-            return Ok(new { currentTime = newCurrentTime.Time.ToString("g"), pastTimes = returnPastTimes, totalPages = pastTimes.TotalPages});
+            return Ok(new { currentTime = TimeHelpers.ConvertTimeToTimeZone(newCurrentTime.Time, timeZone).ToString("g"), pastTimes = returnPastTimes, totalPages = pastTimes.TotalPages});
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Clockwork.API.Models;
 using Microsoft.EntityFrameworkCore;
+using Clockwork.API.Helpers;
 
 namespace Clockwork.API.Controllers
 {
@@ -25,7 +26,8 @@ namespace Clockwork.API.Controllers
             var returnPastTimes = pastTimes.Select(pt => new
             {
                 Id = pt.CurrentTimeQueryId,
-                Time = pt.UTCTime.ToString("g")
+                Time = TimeHelpers.ConvertTimeToTimeZone(pt.Time, pt.TimeZone).ToString("g"),
+                TimeZone = pt.TimeZone
             });
             
             return Ok(new { pastTimes = returnPastTimes, pageIndex = pageIndex, totalPages = pastTimes.TotalPages });
